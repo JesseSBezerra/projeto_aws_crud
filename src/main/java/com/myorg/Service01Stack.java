@@ -30,7 +30,7 @@ public class Service01Stack extends Stack {
                 .taskImageOptions(
                         ApplicationLoadBalancedTaskImageOptions.builder()
                                 .containerName("aws_project01")
-                                .image(ContainerImage.fromRegistry("jessebezerra/projeto_teste_aws:1.0.1"))
+                                .image(ContainerImage.fromRegistry("jessebezerra/projeto_teste_aws:1.0.2"))
                                 .containerPort(8080)
                                 .logDriver(LogDriver.awsLogs(AwsLogDriverProps.builder()
                                         .logGroup(LogGroup.Builder.create(this, "Service01LogGroup")
@@ -42,12 +42,12 @@ public class Service01Stack extends Stack {
                                 .build())
                 .publicLoadBalancer(true)
                 .build();
-//
-//        service01.getTargetGroup().configureHealthCheck(new HealthCheck.Builder()
-//                .path("/actuator/health")
-//                .port("8080")
-//                .healthyHttpCodes("200")
-//                .build());
+
+        service01.getTargetGroup().configureHealthCheck(new HealthCheck.Builder()
+                .path("/actuator/health")
+                .port("8080")
+                .healthyHttpCodes("200")
+                .build());
 
         ScalableTaskCount scalableTaskCount = service01.getService().autoScaleTaskCount(EnableScalingProps.builder()
                 .minCapacity(2)
